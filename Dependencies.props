@@ -1,0 +1,20 @@
+﻿<Project>
+    <Import Project="./GameFolder.props"/>
+
+    <PropertyGroup>
+        <BepInExPath>$(GameFolder)/BepInEx</BepInExPath>
+        <GameAssembliesPath>$(BepInExPath)/interop</GameAssembliesPath>
+        <CoreLibPath>$(BepInExPath)/core</CoreLibPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="$(CoreLibPath)/BepInEx.Unity.IL2CPP.dll"/>
+        <Reference Include="$(CoreLibPath)/BepInEx.Core.dll"/>
+        <Reference Include="$(CoreLibPath)/Il2CppInterop.Common.dll"/>
+        <Reference Include="$(CoreLibPath)/Il2CppInterop.Runtime.dll"/>
+        
+        <Reference Include="$(GameAssembliesPath)/*.dll"/>
+        <Reference Remove="$(GameAssembliesPath)/netstandard.dll"/>
+        <Reference Remove="$(GameAssembliesPath)/Newtonsoft.Json.dll"/>
+    </ItemGroup>
+</Project>
