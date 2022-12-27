@@ -13,7 +13,8 @@ namespace CustomExpeditionEvents.Converters
             {
                 return default;
             }
-            else if (reader.TokenType == JsonTokenType.String)
+
+            if (reader.TokenType == JsonTokenType.String)
             {
                 return new SoundEvent(reader.GetString());
             }
@@ -21,10 +22,8 @@ namespace CustomExpeditionEvents.Converters
             {
                 return new SoundEvent(reader.GetUInt32());
             }
-            else
-            {
-                throw new JsonException($"Expected tokens {JsonTokenType.String} or {JsonTokenType.Number}, instead got {reader.TokenType}");
-            }
+
+            throw new JsonException($"Expected tokens {JsonTokenType.String} or {JsonTokenType.Number}, instead got {reader.TokenType}");
         }
 
         public override void Write(Utf8JsonWriter writer, SoundEvent value, JsonSerializerOptions options)
@@ -35,7 +34,7 @@ namespace CustomExpeditionEvents.Converters
             }
             else
             {
-                writer.WriteNullValue(value.Id);
+                writer.WriteNumberValue(value.Id);
             }
         }
     }

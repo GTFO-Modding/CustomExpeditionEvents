@@ -18,6 +18,8 @@ namespace CustomExpeditionEvents.Events.Common
 
         public void Activate(Data data)
         {
+            Log.Debug(nameof(PlaySoundEvent), "Activate");
+
             switch (data.From)
             {
                 case PlaySoundFrom.Global:

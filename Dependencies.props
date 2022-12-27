@@ -5,15 +5,20 @@
         <BepInExPath>$(GameFolder)/BepInEx</BepInExPath>
         <GameAssembliesPath>$(BepInExPath)/interop</GameAssembliesPath>
         <CoreLibPath>$(BepInExPath)/core</CoreLibPath>
+        <PluginsPath>$(BepInExPath)/plugins</PluginsPath>
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="$(CoreLibPath)/BepInEx.Unity.IL2CPP.dll"/>
-        <Reference Include="$(CoreLibPath)/BepInEx.Core.dll"/>
-        <Reference Include="$(CoreLibPath)/Il2CppInterop.Common.dll"/>
-        <Reference Include="$(CoreLibPath)/Il2CppInterop.Runtime.dll"/>
+        <Reference Include="$(CoreLibPath)/BepInEx.Unity.IL2CPP.dll" Private="True"/>
+        <Reference Include="$(CoreLibPath)/BepInEx.Core.dll" Private="True"/>
+        <Reference Include="$(CoreLibPath)/0Harmony.dll" Private="True"/>
+        <Reference Include="$(CoreLibPath)/Il2CppInterop.Common.dll" Private="True"/>
+        <Reference Include="$(CoreLibPath)/Il2CppInterop.Runtime.dll" Private="True"/>
         
-        <Reference Include="$(GameAssembliesPath)/*.dll"/>
+        
+        <Reference Include="$(PluginsPath)/MTFO.dll" Private="True"/>
+        
+        <Reference Include="$(GameAssembliesPath)/*.dll" Private="True"/>
         <Reference Remove="$(GameAssembliesPath)/netstandard.dll"/>
         <Reference Remove="$(GameAssembliesPath)/Newtonsoft.Json.dll"/>
     </ItemGroup>
