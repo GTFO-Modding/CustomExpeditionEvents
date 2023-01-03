@@ -2,12 +2,26 @@
 using CustomExpeditionEvents.Utilities;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CustomExpeditionEvents.Events
 {
-    internal static class EventManager
+    public static class EventManager
     {
+        public static void ActivateEventSequence(string name)
+        {
+            EventSequenceItemData? data = DataManager.EventSequences.FirstOrDefault((e) => e.Name == name && !e.Disabled);
+            if (data == null)
+            {
+                Log.Warn("No such event sequence with name '" + name + "' exists!");
+                return;
+            }
+
+            Log.Verbose($"Activating Event Sequence '{data.Name}' - {data.DebugName}");
+            ActivateEventSequence(data.Events);
+        }
+
         public static void ActivateEventSequence(IEnumerable<EventData> events)
         {
             CoroutineUtility.Enqueue(PerformEventSequence(events));
