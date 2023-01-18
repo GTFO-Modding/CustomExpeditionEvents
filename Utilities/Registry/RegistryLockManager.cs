@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomExpeditionEvents.Utilities
+namespace CustomExpeditionEvents.Utilities.Registry
 {
     internal static class RegistryLockManager
     {

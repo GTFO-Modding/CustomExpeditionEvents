@@ -11,12 +11,15 @@ namespace CustomExpeditionEvents.Utilities
         public CoroutineUtility(nint ptr) : base(ptr)
         { }
 
-        public static void Enqueue(IEnumerator enumerator)
+        public static Coroutine Enqueue(IEnumerator enumerator)
             => Enqueue(enumerator.WrapToIl2Cpp());
-        public static void Enqueue(Il2CppSystem.Collections.IEnumerator enumerator)
+        public static Coroutine Enqueue(Il2CppSystem.Collections.IEnumerator enumerator)
         {
-            s_instance.StartCoroutine(enumerator);
+            return s_instance.StartCoroutine(enumerator);
         }
+
+        public static void Dequeue(Coroutine routine)
+            => s_instance.StopCoroutine(routine);
 
         static CoroutineUtility()
         {

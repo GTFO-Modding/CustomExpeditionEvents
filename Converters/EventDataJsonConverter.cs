@@ -73,7 +73,7 @@ namespace CustomExpeditionEvents.Converters
                     throw new JsonException($"Error reading property {nameof(EventData.Data)}: {nameof(EventData.EventName)} must be defined before the data is.");
                 }
 
-                Type? dataType = EventRegistry.GetEventDataType(item.EventName);
+                Type? dataType = EventRegistry.GetEntryDataType(item.EventName);
                 if (dataType == null)
                 {
                     throw new JsonException($"Error reading property {nameof(EventData.Data)}: Event '{item.EventName}' does not support data.");
@@ -94,7 +94,7 @@ namespace CustomExpeditionEvents.Converters
         protected override void WriteProperties(Utf8JsonWriter writer, EventData value, JsonSerializerOptions options)
         {
             writer.WriteString(nameof(EventData.EventName), value.EventName);
-            Type? eventDataType = EventRegistry.GetEventDataType(value.EventName);
+            Type? eventDataType = EventRegistry.GetEntryDataType(value.EventName);
             if (eventDataType != null)
             {
                 writer.WritePropertyName(nameof(EventData.Data));

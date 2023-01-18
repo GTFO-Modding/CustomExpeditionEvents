@@ -4,7 +4,7 @@ using LevelGeneration;
 
 namespace CustomExpeditionEvents.Events.Common
 {
-    public sealed class UnlockSecurityDoorEvent : IEvent<UnlockSecurityDoorEvent.Data>
+    internal sealed class UnlockSecurityDoorEvent : IEvent<UnlockSecurityDoorEvent.Data>
     {
         public string Name => "CloseSecurityDoor";
 

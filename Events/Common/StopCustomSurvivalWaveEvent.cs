@@ -3,7 +3,7 @@ using CustomExpeditionEvents.Utilities;
 
 namespace CustomExpeditionEvents.Events.Common
 {
-    public sealed class StopCustomSurvivalWaveEvent : IEvent<StopCustomSurvivalWaveEvent.Data>
+    internal sealed class StopCustomSurvivalWaveEvent : IEvent<StopCustomSurvivalWaveEvent.Data>
     {
         public string Name => "StopCustomSurvivalWave";
 

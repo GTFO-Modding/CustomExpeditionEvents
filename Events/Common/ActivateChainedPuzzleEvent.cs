@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CustomExpeditionEvents.Events.Common
 {
-    public sealed class ActivateChainedPuzzleEvent : IEvent<ActivateChainedPuzzleEvent.Data>
+    internal sealed class ActivateChainedPuzzleEvent : IEvent<ActivateChainedPuzzleEvent.Data>
     {
         public string Name => "ActivateChainedPuzzle";
 

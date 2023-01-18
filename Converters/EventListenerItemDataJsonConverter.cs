@@ -51,7 +51,7 @@ namespace CustomExpeditionEvents.Converters
                     throw new JsonException($"Error reading property {nameof(EventListenerItemData.TriggerSettings)}: {nameof(EventListenerItemData.TriggerName)} must be defined before the settings are.");
                 }
 
-                Type? settingsType = EventTriggerRegistry.GetTriggerSettingsType(item.TriggerName);
+                Type? settingsType = EventTriggerRegistry.GetEntrySettingsType(item.TriggerName);
                 if (settingsType == null)
                 {
                     throw new JsonException($"Error reading property {nameof(EventListenerItemData.TriggerSettings)}: Trigger '{item.TriggerName}' does not support settings.");
@@ -72,7 +72,7 @@ namespace CustomExpeditionEvents.Converters
         protected override void WriteProperties(Utf8JsonWriter writer, EventListenerItemData value, JsonSerializerOptions options)
         {
             writer.WriteString(nameof(EventListenerItemData.TriggerName), value.TriggerName);
-            Type? triggerSettingsType = EventTriggerRegistry.GetTriggerSettingsType(value.TriggerName);
+            Type? triggerSettingsType = EventTriggerRegistry.GetEntrySettingsType(value.TriggerName);
             if (triggerSettingsType != null)
             {
                 writer.WritePropertyName(nameof(EventListenerItemData.TriggerSettings));

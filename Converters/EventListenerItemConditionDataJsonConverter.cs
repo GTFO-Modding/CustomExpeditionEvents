@@ -24,7 +24,7 @@ namespace CustomExpeditionEvents.Converters
                     throw new JsonException($"Error reading property {nameof(EventListenerItemConditionData.Data)}: {nameof(EventListenerItemConditionData.ConditionName)} must be defined before the data is.");
                 }
 
-                Type? dataType = TriggerConditionRegistry.GetConditionDataType(item.ConditionName);
+                Type? dataType = TriggerConditionRegistry.GetEntryDataType(item.ConditionName);
                 if (dataType == null)
                 {
                     throw new JsonException($"Error reading property {nameof(EventListenerItemConditionData.Data)}: Condition '{item.ConditionName}' does not support data.");
@@ -44,7 +44,7 @@ namespace CustomExpeditionEvents.Converters
         protected override void WriteProperties(Utf8JsonWriter writer, EventListenerItemConditionData value, JsonSerializerOptions options)
         {
             writer.WriteString(nameof(EventListenerItemConditionData.ConditionName), value.ConditionName);
-            Type? conditionDataType = TriggerConditionRegistry.GetConditionDataType(value.ConditionName);
+            Type? conditionDataType = TriggerConditionRegistry.GetEntryDataType(value.ConditionName);
             if (conditionDataType != null)
             {
                 writer.WritePropertyName(nameof(EventListenerItemConditionData.Data));

@@ -5,16 +5,9 @@ using Player;
 
 namespace CustomExpeditionEvents.Events.Common
 {
-    public sealed class PlaySoundEvent : IEvent<PlaySoundEvent.Data>
+    internal sealed class PlaySoundEvent : IEvent<PlaySoundEvent.Data>
     {
         public string Name => "PlaySound";
-
-        public enum PlaySoundFrom
-        {
-            Global,
-            LocalPlayer,
-            Area
-        }
 
         public void Activate(Data data)
         {
@@ -22,13 +15,13 @@ namespace CustomExpeditionEvents.Events.Common
 
             switch (data.From)
             {
-                case PlaySoundFrom.Global:
+                case BuiltInEvent.PlaySoundEventSource.Global:
                     this.ActivateFromGlobal(data.SoundID);
                     break;
-                case PlaySoundFrom.LocalPlayer:
+                case BuiltInEvent.PlaySoundEventSource.LocalPlayer:
                     this.ActivateFromLocalPlayer(data.SoundID);
                     break;
-                case PlaySoundFrom.Area:
+                case BuiltInEvent.PlaySoundEventSource.Area:
                     this.ActivateFromArea(data.SoundID, data.DimensionIndex, data.LayerType, data.ZoneIndex, data.AreaIndex);
                     break;
                 default:
@@ -96,7 +89,7 @@ namespace CustomExpeditionEvents.Events.Common
         public sealed class Data
         {
             public SoundEvent SoundID { get; set; }
-            public PlaySoundFrom From { get; set; }
+            public BuiltInEvent.PlaySoundEventSource From { get; set; }
             public eLocalZoneIndex ZoneIndex { get; set; }
             public LG_LayerType LayerType { get; set; }
             public eDimensionIndex DimensionIndex { get; set; }

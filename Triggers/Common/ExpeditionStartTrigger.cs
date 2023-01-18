@@ -2,7 +2,7 @@
 
 namespace CustomExpeditionEvents.Triggers.Common
 {
-    public sealed class ExpeditionStartTrigger : IEventTrigger
+    internal sealed class ExpeditionStartTrigger : IEventTrigger
     {
         public string Name => "ExpeditionStart";
 

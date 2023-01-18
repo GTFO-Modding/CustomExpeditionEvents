@@ -1,21 +1,25 @@
-﻿using System;
+﻿using CustomExpeditionEvents.Utilities.Registry;
+using System;
 
 namespace CustomExpeditionEvents.Events
 {
-    public interface IEventBase
+    public interface IEventBase : IRegistryItemWithData
     {
         string Name { get; }
 
-        Type? DataType { get; }
-
         void Activate(object? eventData);
+
+        string IRegistryItem.ID => this.Name;
     }
 
+    /// <summary>
+    /// An event without any data.
+    /// </summary>
     public interface IEvent : IEventBase
     {
         void Activate();
 
-        Type? IEventBase.DataType => null;
+        Type? IRegistryItemWithData.DataType => null;
 
         void IEventBase.Activate(object? eventData)
         {
@@ -23,10 +27,14 @@ namespace CustomExpeditionEvents.Events
         }
     }
 
+    /// <summary>
+    /// An event with some data
+    /// </summary>
+    /// <typeparam name="TData">The data for the event</typeparam>
     public interface IEvent<TData> : IEventBase
     {
 
-        Type IEventBase.DataType => typeof(TData);
+        Type IRegistryItemWithData.DataType => typeof(TData);
 
         void IEventBase.Activate(object? data)
         {

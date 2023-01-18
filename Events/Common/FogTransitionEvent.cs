@@ -2,7 +2,7 @@
 
 namespace CustomExpeditionEvents.Events.Common
 {
-    public sealed class FogTransitionEvent : IEvent<FogTransitionEvent.Data>
+    internal sealed class FogTransitionEvent : IEvent<FogTransitionEvent.Data>
     {
         public string Name => "FogTransition";
         

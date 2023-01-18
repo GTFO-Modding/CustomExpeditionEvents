@@ -1,38 +1,94 @@
-﻿using CustomExpeditionEvents.Utilities;
+﻿using CustomExpeditionEvents.Conditions;
+using CustomExpeditionEvents.Data;
+using CustomExpeditionEvents.Utilities;
+using CustomExpeditionEvents.Utilities.Registry;
 using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace CustomExpeditionEvents.Triggers
 {
-    public static class EventTriggerRegistry
+    public sealed class EventTriggerRegistry : RegistryBase<EventTriggerRegistry, IEventTriggerBase>
     {
-        private static readonly Dictionary<string, IEventTriggerBase> s_registeredTriggers = new();
+        protected override string RegistryName => "trigger";
 
-        public static void Register<T>()
-            where T : IEventTriggerBase, new()
+        protected override void DumpItem(StringBuilder contentBuilder, IEventTriggerBase entry)
         {
-            RegistryLockManager.EnsureUnlocked("trigger");
+            base.DumpItem(contentBuilder, entry);
+            Type? dataType = entry.DataType;
+            Type? settingsType = entry.SettingsType;
 
-            T trigger = new();
-
-            if (EventTriggerRegistry.s_registeredTriggers.ContainsKey(trigger.Name))
+            if (dataType != null)
             {
-                throw new ArgumentException("A trigger with name '" + trigger.Name + "' is already registered");
+                contentBuilder.AppendLine("Data:");
+                contentBuilder.AppendLine();
+                DumpingUtility.Dump(contentBuilder, dataType);
             }
 
-            EventTriggerRegistry.s_registeredTriggers.Add(trigger.Name, trigger);
-            Log.Message($"Registered trigger {trigger.Name} as {trigger.GetType().FullName}");
+            if (settingsType != null)
+            {
+                contentBuilder.AppendLine("Settings:");
+                contentBuilder.AppendLine();
+                DumpingUtility.Dump(contentBuilder, settingsType);
+            }
         }
 
-
-        internal static Type? GetTriggerSettingsType(string triggerName)
+        public static Type? GetEntrySettingsType(string entryID)
         {
-            if (!EventTriggerRegistry.s_registeredTriggers.TryGetValue(triggerName, out IEventTriggerBase? trigger))
+            if (!EventTriggerRegistry.TryGetEntry(entryID, out IEventTriggerBase? entry))
             {
                 return null;
             }
 
-            return trigger.SettingsType;
+            return entry.SettingsType;
+        }
+
+        protected override void OnItemRegistered(IEventTriggerBase entry)
+        {
+            entry.SetListener((data) =>
+            {
+                foreach (EventListenerItemData listener in DataManager.EventListeners)
+                {
+                    if (listener.Disabled)
+                    {
+                        continue;
+                    }
+
+                    if (listener.TriggerName != entry.Name)
+                    {
+                        continue;
+                    }
+
+                    if (!entry.SettingsAreValid(listener.TriggerSettings, data))
+                    {
+                        continue;
+                    }
+
+                    bool invalidCondition = listener.Conditions.Any((condition) =>
+                    {
+                        if (condition.Disabled)
+                        {
+                            return false;
+                        }
+
+                        if (!TriggerConditionRegistry.TryGetEntry(condition.ConditionName, out ITriggerConditionBase? triggerCondition))
+                        {
+                            Log.Warn(nameof(EventTriggerRegistry) + ".Trigger", $"Condition with debug name '{condition.DebugName}' has an invalid condition that couldn't be found ({condition.ConditionName}). Will be skipped!");
+                            return false;
+                        }
+
+                        return !triggerCondition.IsValid(condition.Data);
+                    });
+
+                    if (invalidCondition)
+                    {
+                        continue;
+                    }
+
+                    listener.Activation.Activate();
+                }
+
+            });
         }
     }
 }

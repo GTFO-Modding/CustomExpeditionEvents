@@ -8,10 +8,11 @@ using LevelGeneration;
 using Player;
 using SNetwork;
 using System;
+using System.ComponentModel;
 
 namespace CustomExpeditionEvents.Events.Common
 {
-    public sealed class ActivateSurvivalWaveEvent : IEvent<ActivateSurvivalWaveEvent.Data>
+    internal sealed class ActivateSurvivalWaveEvent : IEvent<ActivateSurvivalWaveEvent.Data>
     {
         public string Name => "ActivateSurvivalWave";
 
@@ -78,29 +79,31 @@ namespace CustomExpeditionEvents.Events.Common
 
         public sealed class Data
         {
+            [Description("The ID of the SurvivalWaveSettings datablock to use")]
             public uint SettingsID { get; set; }
+            [Description("The ID of the SurvivalWavePopulation datablock to use")]
             public uint PopulationID { get; set; }
 
-            public SpawnSource? Source { get; set; }
+            [Description("The source of where the enemies will spawn from. If not specified, will use the location of the host.")]
+            public BuiltInEvent.SurvivalWaveEventSource? Source { get; set; }
 
+            [Description("The type of survival wave spawn")]
             public SurvivalWaveSpawnType SpawnType { get; set; }
+            [Description("The delay (in seconds) before the enemies spawn")]
             public float SpawnDelay { get; set; }
+            [Description("The distance of how far the enemies will be spawn from the source. Defaults to two rooms.")]
             public float AreaDistance { get; set; } = 2;
 
+            [Description("Custom spawn direction. Optional.")]
             public Vec3? CustomSpawnDirection { get; set; }
 
+            [Description("Whether or not to play a wave scream when enemies spawn")]
             public bool PlayScreamOnSpawn { get; set; } = true;
+            [Description("Don't know what this is used for. Your guess is as good as mine.")]
             public string? OverrideWorldEventFilter { get; set; }
 
+            [Description("A unique ID for the wave. This will allow the wave to be stopped via the StopCustomSurvivalWave event.")]
             public string? CustomWaveID { get; set; }
-        }
-
-        public sealed class SpawnSource
-        {
-            public eLocalZoneIndex Zone { get; set; }
-            public LG_LayerType Layer { get; set; }
-            public eDimensionIndex Dimension { get; set; }
-            public int? Area { get; set; }
         }
     }
 }

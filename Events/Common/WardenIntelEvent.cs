@@ -2,7 +2,7 @@
 
 namespace CustomExpeditionEvents.Events.Common
 {
-    public sealed class WardenIntelEvent : IEvent<WardenIntelEvent.Data>
+    internal sealed class WardenIntelEvent : IEvent<WardenIntelEvent.Data>
     {
         public string Name => "WardenIntel";
 
