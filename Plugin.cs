@@ -30,6 +30,7 @@ namespace CustomExpeditionEvents
             EventRegistry.Register<UnlockSecurityDoorEvent>();
             EventRegistry.Register<WardenIntelEvent>();
             EventRegistry.Register<SetDataEvent>();
+            EventRegistry.Register<EmptyEvent>();
 
             // Triggers
             EventTriggerRegistry.Register<ExpeditionStartTrigger>();
