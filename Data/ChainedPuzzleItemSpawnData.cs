@@ -8,6 +8,6 @@ namespace CustomExpeditionEvents.Data
         public eDimensionIndex DimensionIndex { get; set; }
         public LG_LayerType LayerType { get; set; }
         public eLocalZoneIndex ZoneIndex { get; set; }
-        public int AreaIndex { get; set; }
+        public int? AreaIndex { get; set; }
     }
 }

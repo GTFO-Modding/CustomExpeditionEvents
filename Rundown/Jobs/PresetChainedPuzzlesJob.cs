@@ -1,5 +1,7 @@
 ﻿using ChainedPuzzles;
+using CustomExpeditionEvents.Components;
 using CustomExpeditionEvents.Data;
+using CustomExpeditionEvents.Events.Common.Managers;
 using CustomExpeditionEvents.Utilities;
 using Globals;
 using Il2CppInterop.Runtime;
@@ -8,8 +10,7 @@ using LevelGeneration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
 namespace CustomExpeditionEvents.Rundown.Jobs
 {
@@ -61,8 +62,38 @@ namespace CustomExpeditionEvents.Rundown.Jobs
 
             foreach (ChainedPuzzleItemData puzzleData in chainedPuzzlesToBuild)
             {
-                // todo: use ChainedPuzzleManager.CreatePuzzleInstance
-                //       to create chained puzzles.
+                if (!ExpeditionUtilities.TryGetZone(puzzleData.SpawnData.DimensionIndex, puzzleData.SpawnData.LayerType, puzzleData.SpawnData.ZoneIndex, out LG_Zone? zone))
+                {
+                    Log.Warn(nameof(PresetChainedPuzzlesJob), $"Failed to build puzzle '{puzzleData.Name}' ({puzzleData.DebugName}): Failed to fetch zone!");
+                    continue;
+                }
+
+                int areaIndex;
+                if (!puzzleData.SpawnData.AreaIndex.HasValue)
+                {
+                    areaIndex = Builder.SessionSeedRandom.Range(0, zone.m_areas.Count);
+                }
+                else
+                {
+                    areaIndex = puzzleData.SpawnData.AreaIndex.Value;
+                }
+
+                areaIndex = Math.Max(Math.Min(areaIndex, zone.m_areas.Count - 1), 0);
+
+                LG_Area area = zone.m_areas[areaIndex];
+
+                string puzzleName = puzzleData.Name;
+
+                Vector3 sourcePos = area.m_courseNode.GetRandomPositionInside_SessionSeed();
+
+                ChainedPuzzleInstance puzzleInstance = ChainedPuzzleManager.CreatePuzzleInstance(puzzleData.ChainedPuzzleID, area, sourcePos, area.transform);
+                CustomChainedPuzzleDataComponent componentData = puzzleInstance.gameObject.AddComponent<CustomChainedPuzzleDataComponent>();
+
+                componentData.PuzzleName = puzzleName;
+
+                ChainedPuzzleEventManager.RegisterInstance(puzzleName, puzzleInstance);
+
+                Log.Debug($"Built puzzle '{puzzleData.Name}' ({puzzleData.DebugName})");
             }
 
             return true;
