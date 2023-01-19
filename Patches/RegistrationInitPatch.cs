@@ -23,17 +23,17 @@ namespace CustomExpeditionEvents.Patches
 
             if (PluginConfig.Current.DumpEvents)
             {
-                EventRegistry.Dump();
+                IDumpableRegistry<EventRegistry, IEventBase>.Dump();
             }
 
             if (PluginConfig.Current.DumpConditions)
             {
-                TriggerConditionRegistry.Dump();
+                IDumpableRegistry<TriggerConditionRegistry, ITriggerConditionBase>.Dump();
             }
 
             if (PluginConfig.Current.DumpTriggers)
             {
-                EventTriggerRegistry.Dump();
+                IDumpableRegistry<EventTriggerRegistry, IEventTriggerBase>.Dump();
             }
         }
     }

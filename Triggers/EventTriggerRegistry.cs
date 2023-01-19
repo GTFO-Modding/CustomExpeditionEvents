@@ -8,13 +8,13 @@ using System.Text;
 
 namespace CustomExpeditionEvents.Triggers
 {
-    public sealed class EventTriggerRegistry : RegistryBase<EventTriggerRegistry, IEventTriggerBase>
+    public sealed class EventTriggerRegistry : RegistryBase<EventTriggerRegistry, IEventTriggerBase>, IDumpableRegistry<EventTriggerRegistry, IEventTriggerBase>
     {
         protected override string RegistryName => "trigger";
 
-        protected override void DumpItem(StringBuilder contentBuilder, IEventTriggerBase entry)
+        void IDumpableRegistry<EventTriggerRegistry, IEventTriggerBase>.DumpItem(StringBuilder contentBuilder, IEventTriggerBase entry)
         {
-            base.DumpItem(contentBuilder, entry);
+            IDumpableRegistry<EventTriggerRegistry, IEventTriggerBase>.DumpItemDefault(contentBuilder, entry);
             Type? dataType = entry.DataType;
             Type? settingsType = entry.SettingsType;
 

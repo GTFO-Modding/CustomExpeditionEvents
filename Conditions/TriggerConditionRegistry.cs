@@ -2,7 +2,7 @@
 
 namespace CustomExpeditionEvents.Conditions
 {
-    public sealed class TriggerConditionRegistry : RegistryWithDataBase<TriggerConditionRegistry, ITriggerConditionBase>
+    public sealed class TriggerConditionRegistry : DumpableRegistryWithDataBase<TriggerConditionRegistry, ITriggerConditionBase>
     {
         /// <inheritdoc/>
         protected override string RegistryName => "condition";

@@ -36,13 +36,13 @@ namespace CustomExpeditionEvents.Rundown.Jobs
 #if IL2CPP_INHERITANCE
         new 
 #endif
-            
+
         public bool Build()
         {
+            // this should be checked for consistency
             uint rundownID = Global.RundownIdToLoad;
-            RundownSettingsItemData? data = DataManager.RundownSettings.FirstOrDefault((settings) => settings.RundownID == rundownID);
 
-            if (data == null)
+            if (!DataManager.RundownSettings.TryGetEntry(rundownID, out RundownSettingsItemData? data))
             {
                 Log.Verbose(nameof(PresetChainedPuzzlesJob), "No rundown information specified for rundown id '" + rundownID + "'");
                 return true;
@@ -58,7 +58,7 @@ namespace CustomExpeditionEvents.Rundown.Jobs
                 return true;
             }
 
-            IEnumerable<ChainedPuzzleItemData> chainedPuzzlesToBuild = DataManager.ChainedPuzzles.Where((puzzle) => !puzzle.Disabled &&  expeditionData.Settings.RequiredChainedPuzzles.Contains(puzzle.Name));
+            IEnumerable<ChainedPuzzleItemData> chainedPuzzlesToBuild = expeditionData.Settings.RequiredChainedPuzzles.Select((puzzleName) => DataManager.ChainedPuzzles.GetEntry(puzzleName));
 
             foreach (ChainedPuzzleItemData puzzleData in chainedPuzzlesToBuild)
             {

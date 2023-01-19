@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using CustomExpeditionEvents.Data.Registries;
 using CustomExpeditionEvents.Utilities;
 using MTFO.Managers;
 
@@ -11,41 +12,17 @@ namespace CustomExpeditionEvents.Data
 {
     public static class DataManager
     {
-        private static ReadOnlyCollection<ChainedPuzzleItemData>? s_chainedPuzzles;
-        private static ReadOnlyCollection<EventListenerItemData>? s_eventListeners;
-        private static ReadOnlyCollection<EventSequenceItemData>? s_eventSequences;
-        private static ReadOnlyCollection<RundownSettingsItemData>? s_rundownSettings;
-
-        public static ReadOnlyCollection<ChainedPuzzleItemData> ChainedPuzzles
-        {
-            get => DataManager.s_chainedPuzzles ?? new(new List<ChainedPuzzleItemData>());
-        }
-
-        public static ReadOnlyCollection<EventListenerItemData> EventListeners
-        {
-            get => DataManager.s_eventListeners ?? new(new List<EventListenerItemData>());
-        }
-
-        public static ReadOnlyCollection<EventSequenceItemData> EventSequences
-        {
-            get => DataManager.s_eventSequences ?? new(new List<EventSequenceItemData>());
-        }
-
-        public static ReadOnlyCollection<RundownSettingsItemData> RundownSettings
-        {
-            get => DataManager.s_rundownSettings ?? new(new List<RundownSettingsItemData>());
-        }
+        public static ChainedPuzzleRegistry ChainedPuzzles { get; } = new();
+        public static EventListenerRegistry EventListeners { get; } = new();
+        public static EventSequenceRegistry EventSequences { get; } = new();
+        public static RundownSettingsRegistry RundownSettings { get; } = new();
 
         internal static void Initialize()
         {
-            DataManager.s_chainedPuzzles = Load<ChainedPuzzleWrapper>("ChainedPuzzles.json")
-                .Unwrap();
-            DataManager.s_eventListeners = Load<EventListenersWrapper>("EventListeners.json")
-                .Unwrap();
-            DataManager.s_eventSequences = Load<EventSequencesWrapper>("EventSequences.json")
-                .Unwrap();
-            DataManager.s_rundownSettings = Load<RundownSettingsWrapper>("RundownSettings.json")
-                .Unwrap();
+            DataManager.EventListeners.RegisterAll(DataManager.Load<EventListenersWrapper>("EventListeners.json").Listeners);
+            DataManager.ChainedPuzzles.RegisterAll(DataManager.Load<ChainedPuzzleWrapper>("ChainedPuzzles.json").Puzzles);
+            DataManager.EventSequences.RegisterAll(DataManager.Load<EventSequencesWrapper>("EventSequences.json").Sequences);
+            DataManager.RundownSettings.RegisterAll(DataManager.Load<RundownSettingsWrapper>("RundownSettings.json").Rundowns);
         }
 
         #region Utilities
@@ -136,42 +113,21 @@ namespace CustomExpeditionEvents.Data
         private sealed class ChainedPuzzleWrapper
         {
             public List<ChainedPuzzleItemData> Puzzles { get; set; } = new();
-
-            public ReadOnlyCollection<ChainedPuzzleItemData> Unwrap()
-            {
-                return new ReadOnlyCollection<ChainedPuzzleItemData>(this.Puzzles);
-            }
         }
 
         private sealed class EventListenersWrapper
         {
             public List<EventListenerItemData> Listeners { get; set; } = new();
-
-
-            public ReadOnlyCollection<EventListenerItemData> Unwrap()
-            {
-                return new ReadOnlyCollection<EventListenerItemData>(this.Listeners);
-            }
         }
 
         private sealed class EventSequencesWrapper
         {
             public List<EventSequenceItemData> Sequences { get; set; } = new();
-
-            public ReadOnlyCollection<EventSequenceItemData> Unwrap()
-            {
-                return new ReadOnlyCollection<EventSequenceItemData>(this.Sequences);
-            }
         }
 
         private sealed class RundownSettingsWrapper
         {
             public List<RundownSettingsItemData> Rundowns { get; set; } = new();
-
-            public ReadOnlyCollection<RundownSettingsItemData> Unwrap()
-            {
-                return new ReadOnlyCollection<RundownSettingsItemData>(this.Rundowns);
-            }
         }
     }
 }

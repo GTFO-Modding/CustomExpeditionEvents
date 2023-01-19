@@ -257,8 +257,7 @@ namespace CustomExpeditionEvents.Events
                 string name = Encoding.UTF8.GetString(data.Slice(offset, nameSize));
                 offset += nameSize;
 
-                EventSequenceItemData? eventSequence = DataManager.EventSequences.FirstOrDefault((e) => e.Name == name && !e.Disabled);
-                if (eventSequence == null)
+                if (!DataManager.EventSequences.TryGetEntry(name, out EventSequenceItemData? eventSequence))
                 {
                     Log.Warn(nameof(EventManager), "No such event sequence with name '" + name + "' exists!");
                     return null;
@@ -303,8 +302,7 @@ namespace CustomExpeditionEvents.Events
         /// <param name="name">The name of the event sequence</param>
         public static void ActivateEventSequence(string name)
         {
-            EventSequenceItemData? data = DataManager.EventSequences.FirstOrDefault((e) => e.Name == name && !e.Disabled);
-            if (data == null)
+            if (!DataManager.EventSequences.TryGetEntry(name, out EventSequenceItemData? data))
             {
                 Log.Warn(nameof(EventManager), "No such event sequence with name '" + name + "' exists!");
                 return;
