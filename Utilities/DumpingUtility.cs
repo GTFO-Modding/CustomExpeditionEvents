@@ -8,11 +8,12 @@ using System.Text.Json.Serialization;
 
 namespace CustomExpeditionEvents.Utilities
 {
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
+    public sealed class SkipDumpingAttribute : Attribute
+    { }
+
     internal static class DumpingUtility
     {
-        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
-        public sealed class SkipAttribute : Attribute
-        { }
 
         private static readonly Type[] builtInTypes = new Type[]
         {
@@ -61,7 +62,7 @@ namespace CustomExpeditionEvents.Utilities
 
                 foreach (PropertyInfo property in properties)
                 {
-                    if (property.GetCustomAttribute<SkipAttribute>() != null)
+                    if (property.GetCustomAttribute<SkipDumpingAttribute>() != null)
                     {
                         continue;
                     }
@@ -96,7 +97,7 @@ namespace CustomExpeditionEvents.Utilities
                 {
                     FieldInfo field = fields[index];
 
-                    if (field.GetCustomAttribute<SkipAttribute>() != null)
+                    if (field.GetCustomAttribute<SkipDumpingAttribute>() != null)
                     {
                         continue;
                     }
@@ -194,7 +195,7 @@ namespace CustomExpeditionEvents.Utilities
                 return false;
             }
 
-            if (type.GetCustomAttribute<SkipAttribute>() != null)
+            if (type.GetCustomAttribute<SkipDumpingAttribute>() != null)
             {
                 return false;
             }

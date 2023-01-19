@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CustomExpeditionEvents.Utilities
 {
     [JsonConverter(typeof(SoundEventJsonConverter))]
-    [DumpingUtility.Skip]
+    [SkipDumping]
     public readonly struct SoundEvent
     {
         private readonly bool m_isName;
