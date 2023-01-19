@@ -1,4 +1,5 @@
 ﻿using CustomExpeditionEvents.Utilities;
+using System.ComponentModel;
 
 namespace CustomExpeditionEvents.Events.Common
 {
@@ -15,8 +16,11 @@ namespace CustomExpeditionEvents.Events.Common
 
         public sealed class Data
         {
+            [Description("The Fog Settings DataBlock ID")]
             public uint FogID { get; set; }
+            [Description("The duration (in seconds) for transitioning between the current fog settings and the new settings")]
             public float TransitionDuration { get; set; }
+            [Description("The dimension the fog settings are for")]
             public eDimensionIndex Dimension { get; set; }
         }
     }

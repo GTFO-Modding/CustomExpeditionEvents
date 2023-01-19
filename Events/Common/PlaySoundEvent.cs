@@ -2,6 +2,7 @@
 using GameData;
 using LevelGeneration;
 using Player;
+using System.ComponentModel;
 
 namespace CustomExpeditionEvents.Events.Common
 {
@@ -88,11 +89,17 @@ namespace CustomExpeditionEvents.Events.Common
 
         public sealed class Data
         {
+            [Description("The ID of the sound")]
             public SoundEvent SoundID { get; set; }
+            [Description("The source to play the sound from")]
             public BuiltInEvent.PlaySoundEventSource From { get; set; }
+            [Description("The zone index to use (if playing from an area)")]
             public eLocalZoneIndex ZoneIndex { get; set; }
+            [Description("The layer to use (if playing from an area)")]
             public LG_LayerType LayerType { get; set; }
+            [Description("The dimension to use (if playing from an area)")]
             public eDimensionIndex DimensionIndex { get; set; }
+            [Description("The area index to use (if playing from an area)")]
             public int AreaIndex { get; set; }
         }
     }

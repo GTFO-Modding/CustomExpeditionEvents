@@ -1,6 +1,6 @@
 ﻿using CustomExpeditionEvents.Events.Common.Managers;
 using CustomExpeditionEvents.Utilities;
-using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace CustomExpeditionEvents.Events.Common
 {
@@ -17,6 +17,7 @@ namespace CustomExpeditionEvents.Events.Common
 
         public sealed class Data
         {
+            [Description("The ChainedPuzzle ID specified in ChainedPuzzles.json. Must be included in your rundown settings!")]
             public string PuzzleID { get; set; } = string.Empty;
         }
     }

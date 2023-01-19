@@ -1,6 +1,7 @@
 ﻿using CustomExpeditionEvents.Utilities;
 using GameData;
 using LevelGeneration;
+using System.ComponentModel;
 
 namespace CustomExpeditionEvents.Events.Common
 {
@@ -22,8 +23,11 @@ namespace CustomExpeditionEvents.Events.Common
 
         public sealed class Data
         {
+            [Description("The zone of the door")]
             public eLocalZoneIndex Zone { get; set; }
+            [Description("The layer of the door")]
             public LG_LayerType Layer { get; set; }
+            [Description("The dimension of the door")]
             public eDimensionIndex Dimension { get; set; }
         }
 

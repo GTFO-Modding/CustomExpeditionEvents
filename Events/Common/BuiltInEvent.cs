@@ -166,6 +166,14 @@ namespace CustomExpeditionEvents.Events.Common
             };
         }
 
+        public static object CreateData_ActivateEventSequenceEvent(string sequenceID)
+        {
+            return new ActivateEventSequenceEvent.Data()
+            {
+                SequenceID = sequenceID
+            };
+        }
+
 
         public enum PlaySoundEventSource
         {
