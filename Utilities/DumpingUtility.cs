@@ -10,6 +10,10 @@ namespace CustomExpeditionEvents.Utilities
 {
     internal static class DumpingUtility
     {
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
+        public sealed class SkipAttribute : Attribute
+        { }
+
         private static readonly Type[] builtInTypes = new Type[]
         {
             typeof(string),
@@ -57,6 +61,11 @@ namespace CustomExpeditionEvents.Utilities
 
                 foreach (PropertyInfo property in properties)
                 {
+                    if (property.GetCustomAttribute<SkipAttribute>() != null)
+                    {
+                        continue;
+                    }
+
                     Type propertyType = property.PropertyType;
                     builder.Append("- ");
                     builder.Append(property.Name);
@@ -86,6 +95,11 @@ namespace CustomExpeditionEvents.Utilities
                 for (int index = 1; index < fields.Length; index++)
                 {
                     FieldInfo field = fields[index];
+
+                    if (field.GetCustomAttribute<SkipAttribute>() != null)
+                    {
+                        continue;
+                    }
 
                     builder.Append("- ");
                     builder.Append(field.Name);
@@ -176,6 +190,11 @@ namespace CustomExpeditionEvents.Utilities
         private static bool IsDocumentableType(Type type)
         {
             if (DumpingUtility.builtInTypes.Contains(type))
+            {
+                return false;
+            }
+
+            if (type.GetCustomAttribute<SkipAttribute>() != null)
             {
                 return false;
             }
