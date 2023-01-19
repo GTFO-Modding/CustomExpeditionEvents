@@ -13,7 +13,7 @@ namespace CustomExpeditionEvents.Components
     internal sealed class CustomChainedPuzzleDataComponent : MonoBehaviour
     {
         public CustomChainedPuzzleDataComponent(nint ptr) : base(ptr)
-        { }'
+        { }
         public Il2CppStringField m_puzzleName;
 
         [HideFromIl2Cpp]
