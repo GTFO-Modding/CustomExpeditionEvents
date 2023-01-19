@@ -13,6 +13,18 @@ namespace CustomExpeditionEvents.Patches
         {
             ExpeditionStartTrigger.Trigger();
         }
+        [HarmonyPatch(typeof(PLOC_Jump), nameof(PLOC_Jump.Enter))]
+        [HarmonyPostfix]
+        public static void OnJump(PLOC_Jump __instance)
+        {
+            JumpTrigger.Trigger(__instance.m_owner);
+        }
+        [HarmonyPatch(typeof(PLOC_Crouch), nameof(PLOC_Crouch.Enter))]
+        [HarmonyPostfix]
+        public static void OnCrouch(PLOC_Crouch __instance)
+        {
+            CrouchTrigger.Trigger(__instance.m_owner);
+        }
 
         [HarmonyPatch(typeof(WardenObjectiveManager), nameof(WardenObjectiveManager.OnStateChange))]
         [HarmonyPrefix]

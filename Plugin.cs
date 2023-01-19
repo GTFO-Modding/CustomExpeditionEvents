@@ -31,13 +31,17 @@ namespace CustomExpeditionEvents
             EventRegistry.Register<WardenIntelEvent>();
             EventRegistry.Register<SetDataEvent>();
             EventRegistry.Register<EmptyEvent>();
+            EventRegistry.Register<ActivateEventSequenceEvent>();
 
             // Triggers
             EventTriggerRegistry.Register<ExpeditionStartTrigger>();
             EventTriggerRegistry.Register<ObjectiveCompleteTrigger>();
+            EventTriggerRegistry.Register<JumpTrigger>();
+            EventTriggerRegistry.Register<CrouchTrigger>();
 
             // Conditions
             TriggerConditionRegistry.Register<DataValidateCondition>();
+            TriggerConditionRegistry.Register<RestrictExpeditionsCondition>();
 
             Harmony patcher = new Harmony(PLUGIN_GUID);
             patcher.PatchAll();
